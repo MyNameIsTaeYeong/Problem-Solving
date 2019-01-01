@@ -6,7 +6,7 @@ using namespace std;
 int in[100000];
 int post[100000];
 //인오더의 root 위치
-int in_position[100000];
+int in_position[100001];
 /*
 	프리오더		루트		L		R		2	1	3	
 	인오더		L		루트		R		1	2	3

@@ -28,7 +28,6 @@ bool next_permutation(int *a, int n){
         swap(&a[i], &a[j]);
         i++; j--;
     }
-    
     return true;
 }
 
@@ -48,4 +47,5 @@ int main()
     puts("");
     return 0;
 }
+
 

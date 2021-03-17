@@ -1,26 +1,41 @@
-#include<cstdio>
+#include <iostream>
+
 using namespace std;
 
 int main()
 {
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+    
     int e,s,m;
-    scanf("%d%d%d", &e, &s, &m);
-    int ans=1;
-    int a=1, b=1, c=1;
-    while(1){
-        if(a==e && b==s && c==m)
+    cin >> e >> s >> m;
+    
+    int e1, s1, m1, ans;
+    e1 = s1 = m1 = ans = 1;
+    
+    while (true) {
+        if(e == e1 && s == s1 && m == m1){
             break;
-       
-        a++; b++; c++;
+        }
+        
+        e1++;
+        s1++;
+        m1++;
         ans++;
-        if(a==16)
-            a=1;
-        if(b==29)
-            b=1;
-        if(c==20)
-            c=1;
+        
+        if(e1 == 16){
+            e1 = 1;
+        }
+        if(s1 == 29){
+            s1 = 1;
+        }
+        if(m1 == 20){
+            m1 = 1;
+        }
     }
-    printf("%d\n", ans);
+    
+    cout << ans;
+    
     return 0;
 }
-

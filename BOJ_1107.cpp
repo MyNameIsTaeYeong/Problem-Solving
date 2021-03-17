@@ -1,60 +1,66 @@
-#include<cstdio>
+#include <iostream>
+
 using namespace std;
+
+const int MAX = 1000000;
 
 bool broken[10];
 
-
-
-int possible(int c){
-    
-    if(c==0){
-        if(broken[0])
-            return 0;
-        else{
-            return 1;
+bool possible(int i){
+    if(i==0){
+        if(broken[i]){
+            return false;
+        }else{
+            return true;
         }
     }
     
-    int len = 0;
-    
-    while(c>0){
-        if(broken[c%10])
-            return 0;
-        c/=10;
-        len++;
+    while(i != 0){
+        if(broken[i % 10]){
+            return false;
+        }
+        i /= 10;
     }
-    return len;
+    return true;
 }
 
 int main()
 {
     int n, m;
-    scanf("%d%d", &n, &m);
-    
-    for(int i=0;i<m;i++){
-        int b;
-        scanf("%d", &b);
-        broken[b] = true;
+    cin >> n >> m;
+
+    for(int i=0; i<m; i++){
+        int btn;
+        cin >> btn;
+        broken[btn] = true;
     }
+
+    int ans = MAX;
+    int chanel = -1;
     
-    int ans = n-100;
-    if(ans<0)
-        ans = -ans;
     
-    for(int i=0; i<1000000; i++){
-        int c=i;
-        if(int len = possible(c)){
-            int press = n - c;
-            if(press<0)
-                press = -press;
-            
-            if(ans > len + press)
-                ans = len + press;
+    for(int i = 0; i <= MAX; i++){
+        if(!possible(i)){
+            continue;
+        }
+        if(ans > abs(n-i)){
+            ans = abs(n-i);
+            chanel = i;
         }
     }
     
-    printf("%d\n", ans);
+    while(true){
+        ans++;
+        chanel /= 10;
+        if(chanel == 0){
+            break;
+        }
+    }
+    
+    ans = min(ans, abs(n-100));
+    
+    
+    cout << ans;
     
     return 0;
 }
-

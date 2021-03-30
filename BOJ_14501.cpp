@@ -1,46 +1,45 @@
-#include<cstdio>
-#include<cstring>
-#include<algorithm>
+#include <iostream>
+#include <algorithm>
+
 using namespace std;
 
-int t[16];
-int p[16];
-int n;
-int cache[16];
+int consulting[15][2];
+int ans = 0;
 
-//day번째 날 상담을 했을 때 최대 수익 리턴
-int consulting(int day){
-    if(day >= n+1)   return 0;
+void solve(int n, int day, int pay)
+{
+    if(day == n){
+        ans = max(ans, pay);
+        return;
+    }
     
-    int& ret = cache[day];
-    if(ret != -1)   return ret;
+    //상담 하는 경우
+    if(day+consulting[day][0] <= n){
+        solve(n, day+consulting[day][0], pay+consulting[day][1]);
+    }
+
+    //상담 하지 않는 경우
+    solve(n, day+1, pay);
     
-    ret = 0;
-    
-    //오늘 일을 하는 경우
-    if(day + t[day] <= n+1)
-        ret = p[day] + consulting(day + t[day]);
-    
-    //오늘 일을 하지 않는 경우
-    for(int i=1; day + i <= n; i++)
-        ret = max(ret, consulting(day + i));
-    
-    return ret;
+    return;
 }
 
 int main()
 {
-    memset(cache, -1, sizeof(cache));
-    scanf("%d", &n);
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
     
-    for(int i=1; i<=n; i++)
-        scanf("%d%d", &t[i], &p[i]);
+    int n;
+    cin >> n;
     
-    int ans=0;
-    for(int i=1; i<=n; i++)
-        ans = max(ans, consulting(i));
+    for(int i=0; i<n; i++){
+        cin >> consulting[i][0] >> consulting[i][1];
+    }
     
-    printf("%d\n", ans);
+    solve(n, 0, 0);
+    
+    cout << ans;
     
     return 0;
 }

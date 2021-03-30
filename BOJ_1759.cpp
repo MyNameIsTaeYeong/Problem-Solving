@@ -1,54 +1,61 @@
-#include<iostream>
-#include<algorithm>
-#include<string>
+#include <iostream>
+#include <algorithm>
+
 using namespace std;
 
-char alpha[35];
-int l, c;
+char alphabet[16];
+char ans[16];
 
-bool check(string passwd){
-    int mo = 0;
-    int ja = 0;
-    
-    for(int i=0; i<passwd.length(); i++){
-        if(passwd[i] == 'a' || passwd[i] == 'e' || passwd[i] == 'i' || passwd[i] == 'o' || passwd[i] == 'u')
-            mo++;
-        else
-            ja++;
-    }
-    
-    if(mo>=1 && ja>=2)
-        return true;
-    else
-        return false;
-}
-// index = alpha 배열의 순서, 
-void go(char *a, int index, string passwd, int length){
-    if(length == l){
-        if(check(passwd)){
-            cout << passwd << '\n';
-            return;
+void solve(int l, int c, int index, int len)
+{
+    if(len == l){
+        int ja = 0;
+        int mo = 0;
+        for(int i=0; i<l; i++){
+            if(ans[i] == 'a' || ans[i] == 'e' || ans[i] == 'i' || ans[i] == 'o' || ans[i] == 'u'){
+                mo++;
+            }else{
+                ja++;
+            }
         }
+        if(mo >= 1 && ja >= 2){
+            cout << ans << '\n';
+        }
+        return;
     }
     
-    if(index >= c) return;
+    if(index == c){
+        return;
+    }
+
     
-    go(a, index+1, passwd+alpha[index], length+1);
-    go(a, index+1, passwd, length);
+    //선택한 경우
+    ans[len] = alphabet[index];
+    solve(l, c, index+1, len+1);
+    
+    //선택하지 않은 경우
+    solve(l, c, index+1, len);
+    
+    
+    
 }
 
 int main()
 {
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+    
+    int l, c;
     cin >> l >> c;
     
     for(int i=0; i<c; i++){
-        cin >> alpha[i];
+        cin >> alphabet[i];
     }
     
-    sort(&alpha[0], &alpha[c]);
+    sort(alphabet, alphabet+c);
     
-    go(alpha, 0, "", 0);
+    solve(l, c, 0, 0);
     
     return 0;
 }
-

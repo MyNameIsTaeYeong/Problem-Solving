@@ -19,3 +19,4 @@ string solution(vector<string> participant, vector<string> completion) {
     }
     return answer;
 }
+

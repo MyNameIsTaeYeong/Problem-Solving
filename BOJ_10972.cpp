@@ -1,32 +1,41 @@
-#include<cstdio>
+#include <iostream>
+#include <vector>
+
 using namespace std;
 
-int permu[10000];
-
-void swap(int *a, int *b){
+void swap(int* a, int* b){
     int temp = *a;
     *a = *b;
     *b = temp;
 }
 
-bool next_permutation(int *a, int n){
-    //1. a[i-1]<a[i]중 가장 큰 i
-    int i = n-1;
-    while(i>0 && a[i-1]>=a[i]) i--;
-    if(i<=0) return false; // 마지막 순열
+bool next_permutation_ty(vector<int> &permutation)
+{
+    unsigned long n = permutation.size();
+    unsigned long i = n-1;
     
-    //2. i<=j중 a[i-1]<a[j]를 만족시키는 가장 큰 j
-    int j = n-1;
-    while(a[i-1]>=a[j]) j--;
+    while(i>0 && permutation[i-1] >= permutation[i]){
+        i--;
+    }
     
-    //3. a[i-1] 와 a[j] swap
-    swap(&a[i-1], &a[j]);
+    if(i==0){
+        return false;
+    }
     
-    //4. a[i]부터 뒤집기
+    unsigned long j = n-1;
+    
+    while(permutation[i-1] >= permutation[j]){
+        j--;
+    }
+    
+    swap(&permutation[i-1], &permutation[j]);
+    
+    
     j = n-1;
     while(i<j){
-        swap(&a[i], &a[j]);
-        i++; j--;
+        swap(&permutation[i], &permutation[j]);
+        i++;
+        j--;
     }
     
     return true;
@@ -35,17 +44,24 @@ bool next_permutation(int *a, int n){
 int main()
 {
     int n;
-    scanf("%d", &n);
-    for(int i=0; i<n; i++)
-        scanf("%d", &permu[i]);
+    cin >> n;
     
-    if(next_permutation(permu, n)){
-        for(int i=0; i<n; i++)
-            printf("%d ", permu[i]);
-    }else{
-        printf("%d", -1);
+    vector<int> permutation(n);
+    
+    
+    for(int i=0; i<n; i++){
+        cin >> permutation[i];
     }
-    puts("");
+    
+    if(next_permutation_ty(permutation)){
+        for(int i=0; i<permutation.size(); i++){
+            cout << permutation[i] << ' ';
+        }
+    }else{
+        cout << -1;
+    }
+    
+    
+    
     return 0;
 }
-

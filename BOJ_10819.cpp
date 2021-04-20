@@ -1,68 +1,79 @@
-#include<cstdio>
-#include<algorithm>
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <stdlib.h>
+
 using namespace std;
 
-int permu[8];
+int ans = -1000000;
 
-void swap(int *a, int *b){
+void swap(int* a, int* b){
     int temp = *a;
     *a = *b;
     *b = temp;
 }
 
-bool next_permutation(int *a, int n)
+bool next_permutation_ty(vector<int> &permutation)
 {
-    int i = n-1;
-    while(i>0 && a[i-1]>=a[i]) i--;
-    if(i<=0) return false;
+    unsigned long n = permutation.size();
+    unsigned long i = n-1;
     
-    int j = n-1;
-    while(a[i-1]>=a[j]) j--;
+    while(i>0 && permutation[i-1] >= permutation[i]){
+        i--;
+    }
     
-    swap(&a[i-1], &a[j]);
+    if(i==0){
+        return false;
+    }
+    
+    unsigned long j = n-1;
+    
+    while(permutation[i-1] >= permutation[j]){
+        j--;
+    }
+    
+    swap(&permutation[i-1], &permutation[j]);
+    
     
     j = n-1;
-    
     while(i<j){
-        swap(&a[i], &a[j]);
-        i++; j--;
+        swap(&permutation[i], &permutation[j]);
+        i++;
+        j--;
     }
     
     return true;
 }
 
+void sum_array(vector<int> &array, int n){
+    int sum = 0;
+    for(int i=0; i<n-1; i++){
+        sum += abs(array[i] - array[i+1]);
+    }
+    
+    if(ans < sum){
+        ans = sum;
+    }
+}
+
 int main()
 {
     int n;
-    scanf("%d", &n);
+    cin >> n;
+    
+    vector<int> array(n);
     
     for(int i=0; i<n; i++){
-        scanf("%d", &permu[i]);
+        cin >> array[i];
     }
     
-    sort(&permu[0], &permu[n-1]);
-    
-    int ans = -100000;
+    sort(array.begin(), array.end());
     
     do{
-        
-        int k = 0;
-        
-        for(int i=0; i<n-1; i++){
-            int abs = permu[i]-permu[i+1];
-            if(abs<0)
-                abs = -abs;
-            
-            k += abs;
-        }
-        
-        if(ans < k)
-            ans = k;
-        
-    }while(next_permutation(permu, n));
+        sum_array(array, n);
+    }while(next_permutation_ty(array));
     
-    printf("%d\n", ans);
+    cout << ans;
     
     return 0;
 }
-

@@ -1,32 +1,74 @@
-#include<cstdio>
+#include <iostream>
+#include <vector>
+
 using namespace std;
 
-int permu[8];
-
-void swap(int *a, int *b){
+void swap(int* a, int* b){
     int temp = *a;
     *a = *b;
     *b = temp;
 }
 
-bool next_permutation(int *a, int n){
-    int i=n-1;
+bool prev_permutation_ty(vector<int> &permutation)
+{
+    unsigned long n = permutation.size();
+    unsigned long i = n-1;
     
-    //1. a[i-1]<a[i] 를 만족하는 가장 큰 i
-    while(i>0 && a[i-1]>=a[i]) i--;
-    if(i<=0) return false;
+    while(i>0 && permutation[i-1] <= permutation[i]){
+        i--;
+    }
     
-    int j = n-1;
-    while(a[j]<=a[i-1]) j--;
+    if(i==0){
+        return false;
+    }
     
-    swap(&a[i-1], &a[j]);
+    
+    unsigned long j = n-1;
+    
+    while(permutation[i-1] <= permutation[j]){
+        j--;
+    }
+    
+    swap(&permutation[i-1], &permutation[j]);
     
     j = n-1;
     while(i<j){
-        swap(&a[i], &a[j]);
-        i++;    j--;
+        swap(&permutation[i], &permutation[j]);
+        i++;
+        j--;
     }
     
+    return true;
+}
+
+bool next_permutation_ty(vector<int> &permutation)
+{
+    unsigned long n = permutation.size();
+    unsigned long i = n-1;
+    
+    while(i>0 && permutation[i-1] >= permutation[i]){
+        i--;
+    }
+    
+    if(i==0){
+        return false;
+    }
+    
+    unsigned long j = n-1;
+    
+    while(permutation[i-1] >= permutation[j]){
+        j--;
+    }
+    
+    swap(&permutation[i-1], &permutation[j]);
+    
+    
+    j = n-1;
+    while(i<j){
+        swap(&permutation[i], &permutation[j]);
+        i++;
+        j--;
+    }
     
     return true;
 }
@@ -34,15 +76,21 @@ bool next_permutation(int *a, int n){
 int main()
 {
     int n;
-    scanf("%d",&n);
-    for(int i=0; i<n; i++)
-        permu[i] = i+1;
+    cin >> n;
+    
+    vector<int> permutation(n);
+    
+    
+    for(int i=0; i<n; i++){
+        permutation[i] = i+1;
+    }
     
     do{
-        for(int i=0; i<n; i++)
-            printf("%d ", permu[i]);
-        puts("");
-    }while(next_permutation(permu, n));
+        for(int i=0; i<permutation.size(); i++){
+            cout << permutation[i] << ' ';
+        }
+        cout<<'\n';
+    }while(next_permutation_ty(permutation));
+    
     return 0;
 }
-

@@ -1,81 +1,60 @@
-#include<cstdio>
-#include<vector>
+#include <iostream>
+#include <algorithm>
+#include <vector>
+
 using namespace std;
-int permu[10];
 
-void swap(int *a, int *b){
-    int temp = *a;
-    *a = *b;
-    *b = temp;
-}
+int w[10][10];
+int ans = 100000000;
 
-bool next_permutation(int *a, int n)
+void solve(vector<int> &permutation)
 {
-    int i = n-1;
-    while(i>0 && a[i-1]>=a[i]) i--;
-    if(i<=0) return false;
+    unsigned long size = permutation.size();
     
-    int j = n-1;
-    while(a[i-1]>=a[j]) j--;
-    
-    swap(&a[i-1], &a[j]);
-    
-    j = n-1;
-    
-    while(i<j){
-        swap(&a[i], &a[j]);
-        i++; j--;
+    int money = 0;
+    for(int i=0; i<size-1; i++){
+        if(w[permutation[i]][permutation[i+1]] == 0){
+            return;
+        }
+        money += w[permutation[i]][permutation[i+1]];
     }
     
-    return true;
+    if(w[permutation[size-1]][permutation[0]] == 0){
+        return;
+    }else {
+        money += w[permutation[size-1]][permutation[0]];
+    }
+    
+    if(money < ans){
+        ans = money;
+    }
 }
 
 int main()
 {
     int n;
-    scanf("%d", &n);
-    
-    for(int i=0; i<n; i++){
-        permu[i] = i;
-    }
-    
-    vector<int> v[n];
+    cin >> n;
     
     for(int i=0; i<n; i++){
         for(int j=0; j<n; j++){
-            int input=0;
-            scanf("%d", &input);
-            v[i].push_back(input);
+            cin >> w[i][j];
         }
     }
     
-    int min = 100000000;
+    vector<int> permutation;
     
-    bool possible = true;
+    for(int i=0; i<n; i++){
+        permutation.push_back(i);
+    }
+    
     
     do{
-        int cost=0;
-        for(int i=0; i<n-1; i++){
-            if(v[permu[i]][permu[i+1]] == 0){
-                possible = false;
-                break;
-            }
-            cost += v[permu[i]][permu[i+1]];
-        }
-        
-        
-        
-        if(possible && v[permu[n-1]][permu[0]]!=0){
-            cost += v[permu[n-1]][permu[0]];
-            if(cost < min)
-                min = cost;
-        }
-        possible = true;
-        
-    }while(next_permutation(permu, n));
+        solve(permutation);
+    }while(next_permutation(permutation.begin(), permutation.end()));
     
-    printf("%d\n", min);
+    cout << ans;
+    
+    
     
     return 0;
 }
-

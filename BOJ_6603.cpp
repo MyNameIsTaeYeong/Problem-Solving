@@ -1,62 +1,53 @@
-#include<cstdio>
-#include<vector>
-#include<algorithm>
+#include <iostream>
+#include <vector>
+
 using namespace std;
+
+void solve(vector<int> &s, int index, int cnt, int k, vector<int> &ans)
+{
+    if(cnt == 6){
+        for(int i=0; i<6; i++){
+            cout << ans[i] << ' ';
+        }
+        cout << '\n';
+        return;
+    }
+    
+    if((6-cnt) > (k-index)){
+        return;
+    }
+    
+    for(int i=index; i<k; i++){
+        ans.push_back(s[i]);
+        solve(s, i+1, cnt+1, k, ans);
+        ans.pop_back();
+    }
+    
+}
 
 int main()
 {
-    while(1){
-        int k;
-        scanf("%d", &k);
-        
-        if(k == 0)
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+    
+    int k;
+    while(true){
+        cin >> k;
+        if(k == 0){
             break;
+        }
         
-        vector<int> p(k);
-        
+        vector<int> s(k);
+        vector<int> ans;
         for(int i=0; i<k; i++){
-            scanf("%d", &p[i]);
+            cin >> s[i];
         }
         
-        vector<int> c;
-        
-        for(int i=0; i<k-6; i++){
-            c.push_back(0);
-        }
-        
-        for(int i=0; i<6; i++){
-            c.push_back(1);
-        }
-        
-        vector<vector<int> > ans;
-        
-        do{
-            vector<int> go;
-            
-            for(int i=0; i<k; i++){
-                if(c[i] == 1){
-                    go.push_back(p[i]);
-                }
-            }
-            
-            ans.push_back(go);
-            
-        }while(next_permutation(c.begin(), c.end()));
-        
-        sort(ans.begin(), ans.end());
-        
-        for(auto &v : ans){
-            for(int i=0; i<6; i++)
-                printf("%d ", v[i]);
-            printf("\n");
-        }
-        
-        printf("\n");
+        solve(s, 0, 0, k, ans);
+        cout << '\n';
         
     }
     
-    
-    
     return 0;
 }
-

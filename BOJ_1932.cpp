@@ -1,40 +1,44 @@
-#include<cstdio>
-#include<cstring>
-#include<algorithm>
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
 using namespace std;
 
-int n;
-int cache[500][500];
-int triangle[500][500];
+int memo[500][500];
 
-int path(int x, int y){
-    //기저사례
-    if(x == n-1)
-        return triangle[x][y];
+int solve(vector< vector<int> > &numbers, int row, int col, int n)
+{
+    if(row == (n-1)){
+        return numbers[row][col];
+    }
+
+    if(memo[row][col] != 0){
+        return memo[row][col];
+    }
+
+    memo[row][col] = numbers[row][col] + max(solve(numbers, row+1, col, n), solve(numbers, row+1, col+1, n));
     
-    int& ret = cache[x][y];
-    if(ret != -1)
-        return ret;
-    
-    for(int i=0; i<2; i++)
-        ret = max(ret, triangle[x][y] + path(x+1, y+i));
-    
-    return ret;
+    return memo[row][col];
 }
 
 int main()
 {
-    memset(cache, -1, sizeof(cache));
-    
-    scanf("%d", &n);
-    
+    int n;
+    cin >> n;
+
+    vector< vector<int> > numbers(n);
+
     for(int i=0; i<n; i++){
         for(int j=0; j<=i; j++){
-            scanf("%d", &triangle[i][j]);
+            int input;
+            cin >> input;
+            numbers[i].push_back(input);
         }
     }
+
     
-    printf("%d\n", path(0, 0));
+
+    cout << solve(numbers, 0, 0, n);
     
     return 0;
 }

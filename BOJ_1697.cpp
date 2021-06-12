@@ -1,48 +1,74 @@
-#include<cstdio>
-#include<queue>
+#include <iostream>
+#include <queue>
+#include <utility>
+
 using namespace std;
 
-bool check[100001];
-int d[100001];
+bool visited[100001];
+
+int bfs(queue< pair<int, int> > q, int k)
+{
+    int rtn = -1;
+
+    while(!q.empty()){
+        int node = q.front().first;
+        int sec = q.front().second;
+        q.pop();
+
+        if(node > 0 && visited[node-1] == false){
+            visited[node-1] = true;
+            q.push(make_pair(node-1, sec+1));
+            if(node-1 == k){
+                rtn = sec+1;
+                break;
+            }
+        }
+
+        if(node < 100000 && visited[node+1] == false){
+            visited[node+1] = true;
+            q.push(make_pair(node+1, sec+1));
+            if(node+1 == k){
+                rtn = sec+1;
+                break;
+            }
+        }
+
+        if(2*node <= 100000 && visited[2*node] == false){
+            visited[2*node] = true;
+            q.push(make_pair(2*node, sec+1));
+            if(2*node == k){
+                rtn = sec+1;
+                break;
+            }
+        }
+
+
+    }
+
+    return rtn;
+
+}
 
 int main()
 {
     int n, k;
-    scanf("%d%d", &n, &k);
-    queue<int> q;
-    q.push(n);
-    check[n] = true;
-    
-    while(!q.empty()){
-        int node = q.front();
-        q.pop();
-        if(node-1 >= 0){
-            if(check[node-1] == false){
-                q.push(node-1);
-                check[node-1] = true;
-                d[node-1] = d[node] + 1;
-            }
-        }
-        if(node+1 <= 100000){
-            if(check[node+1] == false){
-                q.push(node+1);
-                check[node+1] = true;
-                d[node+1] = d[node] + 1;
-            }
-        }
-        
-        if(2*node <= 100000){
-            if(check[2*node] == false){
-                q.push(2*node);
-                check[2*node] = true;
-                d[2*node] = d[node] + 1;
-            }
-        }
-        
+    cin >> n >> k;
+
+    visited[n] = true;
+
+    queue< pair<int, int> > q;
+    q.push(make_pair(n, 0));
+
+    int ans = 0;
+
+    if(n == k){
+        cout << 0;
+    }else{
+        cout << bfs(q, k);
     }
+
     
-    printf("%d\n", d[k]);
     
+
     return 0;
 }
-
